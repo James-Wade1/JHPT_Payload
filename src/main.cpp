@@ -53,7 +53,7 @@ void loop() {
   if (digitalRead(EGGTIMER_SIGNAL) == HIGH && motor_turned_on == false) {
     Serial.println("Turning on motor");
     motor_turned_on = true;
-    motor.setDesiredPositionTicks(-25000);
+    motor.setDesiredPositionTicks(-295000);
     digitalWrite(OPEN_PUMP_SIGNAL, HIGH);
   }
   if (millis() - last_time > 1000){
