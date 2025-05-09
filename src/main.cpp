@@ -5,8 +5,8 @@
 #define SPEED_EN 5
 #define ENCODER_1 3
 #define ENCODER_2 2
-#define OPEN_PUMP_SIGNAL 4
-#define EGGTIMER_SIGNAL 6
+#define OPEN_PUMP_SIGNAL 9
+#define EGGTIMER_SIGNAL A3
 DCMotorControl motor = DCMotorControl(DIRECTION_PH, SPEED_EN, ENCODER_1, ENCODER_2);
 
 #define NumberOfMotors 1
@@ -29,8 +29,13 @@ int i = 0;
 
 unsigned long last_time = millis();
 unsigned long motor_last_time = millis();
+unsigned long long motor_total_time = millis();
 
 bool motor_turned_on = false;
+float avg_eggtimer_voltage = 0;
+const int avg_denom = 5;
+float prev_voltage = 0;
+float curr_voltage = 0;
 
 void setup() {
 
@@ -50,10 +55,21 @@ void setup() {
 }
 
 void loop() {
-  if (digitalRead(EGGTIMER_SIGNAL) == HIGH && motor_turned_on == false) {
+
+  curr_voltage = analogRead(EGGTIMER_SIGNAL)/1025.0*5.0;
+  // avg_eggtimer_voltage = (avg_eggtimer_voltage*avg_denom - prev_voltage + curr_voltage)/avg_denom;
+  // prev_voltage = curr_voltage;
+
+  // avg_eggtimer_voltage = avg_eggtimer_voltage/1025.0*5.0;
+
+  // Serial.println(curr_voltage);
+  // Serial.println(avg_eggtimer_voltage);
+  
+
+  if (curr_voltage > 4.2 && motor_turned_on == false) {
     Serial.println("Turning on motor");
     motor_turned_on = true;
-    motor.setDesiredPositionTicks(-295000);
+    motor.setDesiredPositionTicks(-270000);
     digitalWrite(OPEN_PUMP_SIGNAL, HIGH);
   }
   if (millis() - last_time > 1000){

@@ -222,7 +222,7 @@ void DCMotorControl::setDutyCycle(void) {
 #elif defined SIGN_MAGNITUDE
     if (_PWMOutput >= 0) {  // reduntant code? map between min_pwm and 255.
         // clear direction pin
-        digitalWrite(_DirectionPin, LOW);  // need to set the other direction pin to the opposite value.
+        digitalWrite(_DirectionPin, HIGH);  // need to set the other direction pin to the opposite value.
 
         if (_PWMOutput >= 100.0) {
             analogWrite(_DrivePin, PWMResolution);
@@ -231,7 +231,7 @@ void DCMotorControl::setDutyCycle(void) {
         }
     } else {
         // set direction pin
-        digitalWrite(_DirectionPin, HIGH);
+        digitalWrite(_DirectionPin, LOW);
         if (_PWMOutput <= -100.0) {
             analogWrite(_DrivePin, PWMResolution);
         } else {
